@@ -96,4 +96,25 @@ Output:
 
 ![image](https://github.com/jefcrb/eh_eindwerk/assets/83902653/3cfc44e4-17bc-42df-a579-b6d734831c38)
 
+
+
+```
+python main.py network -a 192.168.1.0/24 -p 22
+```
+Output:
+
+![image](https://github.com/jefcrb/eh_eindwerk/assets/83902653/8a490df0-678f-4f98-afc2-efe6a34c71c0)
+
 (Logging met behulp van de rich library :) )
+
+#### wifi
+De wifi module is gericht op het sniffen van wifi packets rondom
+```
+usage: main.py wifi [-h] [-a] [-b] [-m]
+
+options:
+  -h, --help     show this help message and exit
+  -a, --all      Scan alle wifi netwerken in de omgeving
+  -b, --beacon   Sniff beacon frames in de omgeving
+  -m, --monitor  Monitor de signaalsterkte van verschillende wifi netwerken
+```
