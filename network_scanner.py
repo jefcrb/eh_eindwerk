@@ -15,7 +15,7 @@ class NetworkScanner():
         self.RANGE = False
         self.get_ip(self.url)
 
-        self.logger.log([self.args], 'input')
+        self.logger.log([args], 'input')
 
         self.ports = self.ports_parser(args.ports)
         if self.RANGE:
