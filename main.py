@@ -3,7 +3,6 @@ from rich.markdown import Markdown
 from urllib.parse import urlparse
 from rich.console import Console
 import argparse
-import socket
 
 
 from network_scanner import NetworkScanner
@@ -38,8 +37,9 @@ class Main():
         parser_network.set_defaults(command='network')
 
         parser_wifi = sub_parsers.add_parser('wifi', help='Scan wifi netwerken')
-        parser_wifi.add_argument('-a', '--all', help='Scan alle wifi\'s in de omgeving', action='store_true')
+        parser_wifi.add_argument('-a', '--all', help='Scan alle wifi netwerken in de omgeving', action='store_true')
         parser_wifi.add_argument('-b', '--beacon', help='Sniff beacon frames in de omgeving', action='store_true')
+        parser_wifi.add_argument('-m', '--monitor', help='Monitor de signaalsterkte van verschillende wifi netwerken', action='store_true')
         parser_wifi.set_defaults(command='wifi')
         
         self.args = parser.parse_args()

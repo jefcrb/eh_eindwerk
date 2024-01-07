@@ -3,6 +3,7 @@ from rich.markup import escape
 from rich.console import Console
 from datetime import datetime
 from rich import print
+import math
 import os
 
 del EMOJI["cd"]
@@ -41,6 +42,9 @@ class Logger():
 
         if type == 'wifi-recon':
             self.log_wifi_recon(data)
+
+        if type == 'wifi-monitor':
+            self.log_wifi_monitor(data)
 
 
     def log_hosts(self, data):
@@ -115,6 +119,15 @@ class Logger():
             console.print(f'[blue]{row["type"]}  {row["auth"]}   {" " * (7 * bool(row["auth"] == "Open"))}{row["encr"]}[/blue]')
             for i, bssid in enumerate(row["bssids"]):
                 console.print(f'\n- BSSID {i + 1}: {bssid["name"]}\t\tSignaalsterkte: {loading_bar(bssid["sign"])} ({bssid["sign"]})')
+
+        
+    def log_wifi_monitor(self, data):
+        os.system('cls' if os.name == 'nt' else 'clear')
+        output = ""
+        for row in data:
+            output += '{:.<30} {:.<15}'.format(row["name"], loading_bar(row["sign"]))
+            output += f'\t[cyan]({row["sign"]})[/cyan]\n'
+        console.print(output)
 
 
 def loading_bar(pct):

@@ -2,6 +2,7 @@ from tabulate import tabulate
 from scapy.layers import dot11
 from scapy.all import sniff
 import subprocess
+import time
 import re
 
 
@@ -11,8 +12,9 @@ class WifiScanner():
         args = kwargs.get('args')
 
         self.logger = kwargs.get('logger')
+        self.monitor = args.monitor
 
-        if args.all:
+        if args.all or args.monitor:
             self.get_wifis()
         
         if args.beacon:
@@ -23,8 +25,12 @@ class WifiScanner():
         devices = subprocess.check_output(['netsh','wlan','show','network', 'mode=bssid']) 
         devices = devices.decode('ascii')
 
-        self.logger.log(normalize_wifis_data(devices), 'wifi-recon')
+        wifis = normalize_wifis_data(devices, self.logger, self.monitor)
         
+        if self.monitor:
+            pass
+        else:
+            self.logger.log(wifis, 'wifi-recon')
 
         return devices
     
@@ -33,7 +39,7 @@ class WifiScanner():
         sniff(prn=handle_packet, iface="Wi-Fi", store=False)
     
 
-def normalize_wifis_data(devices):
+def normalize_wifis_data(devices, logger, monitor = False):
     wifis = []
     output = re.split(r'SSID \d+ : ', devices)[1:]
 
@@ -75,15 +81,21 @@ def normalize_wifis_data(devices):
         
         wifis.append(wifi)
 
-    return wifis
+    if not monitor:
+        return wifis
+    else:
+        while True:
+            monitor_out = []
+            for wifi in wifis:
+                monitor_out.append({"name": wifi["name"], "sign": max([x["sign"] for x in wifi["bssids"]])})
+                logger.log(monitor_out, 'wifi-monitor')
+            
+            time.sleep(1)
 
 
 def handle_packet(packet):
     if packet.haslayer(dot11.Dot11Beacon):
-        # Extract the MAC address of the network
         bssid = packet[dot11.Dot11].addr2
-        # Get the name of it
         ssid = packet[dot11.Dot11Elt].info.decode()
-        # Get the RSSI (signal strength)
         rssi = packet.dBm_AntSignal
-        print(f"Network Detected: SSID: {ssid}, BSSID: {bssid}, RSSI: {rssi}")
+        print(f"Netwerk gedetecteerd: SSID: [cyan]{ssid}[/cyan], BSSID: [cyan]{bssid}[/cyan], RSSI: [cyan]{rssi}[/cyan]")
