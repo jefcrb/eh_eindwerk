@@ -118,3 +118,15 @@ options:
   -b, --beacon   Sniff beacon frames in de omgeving
   -m, --monitor  Monitor de signaalsterkte van verschillende wifi netwerken
 ```
+
+De `-a` flag geeft een lijst met gedetecteerde wifinetwerken met extra informatie zoals authenticatietechnologie, encryptie, signaalsterkte, BSSID's, ...
+Voorbeeld:
+```
+python main.py wifi -a
+```
+Output:
+
+![image](https://github.com/jefcrb/eh_eindwerk/assets/83902653/c1cde2c2-1bad-44a4-a263-56ce87af16fc)
+
+De `-b` flag zal beacon frames afkomstig van access points sniffen en decoderen en in de terminal printen
+De `-m` flag zal constant wifinetwerken rondom scannen en hun signaalsterkte tonen, wanneer je rondbeweegt met je apparaat zul je zien dat deze sterker of zwakker worden
