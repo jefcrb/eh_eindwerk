@@ -44,9 +44,9 @@ class Logger():
 
 
     def log_hosts(self, data):
-        console.print(f"Found {len(data)} hosts:")
+        console.print(f"{len(data)} online hosts gevonden:")
         for host in data:
-            console.print(f"%-15s %-15s" % (host['ip'], host['mac']))
+            console.print(f"- [bold blue]%-15s %-15s[/bold blue]" % (host['ip'], host['mac']))
 
         with open('logs/output.txt', 'a') as f:
             f.write(f"{len(data)} online hosts gevonden:\n")
@@ -75,14 +75,14 @@ class Logger():
 
 
     def log_port_found(self, data):
-        console.print(f"[bold blue]Open poort![/bold blue] Poort {data[0]} is open op {data[1]}")
+        console.print(f"[bold blue]Open poort![/bold blue] Poort [cyan]{data[0]}[/cyan] is open op {data[1]}")
 
     
     def log_host_down(self, data):
-        console.print(f"[bold red]Host {data} is offline of onbereikbaar[/bold red]")
+        console.print(f"[bold red]Host {data} is offline of onbereikbaar.[/bold red]")
         
         with open('logs/output.txt', 'a') as f:
-            f.write(f"\n\nHost {data} is offline of onbereikbaar\n")
+            f.write(f"\n\nHost {data} is offline of onbereikbaar.\n")
 
 
     def log_ports_to_scan(self, data):
@@ -98,17 +98,19 @@ class Logger():
 
     
     def log_start_command(self, data):
-        console.print(f"Tool gestart om {datetime.now()} in [bold white]{data.command}[/bold white] modus\n")
+        console.print(f"[bold]Tool gestart om {datetime.now()} in [white]{data.command}[/white] modus[/bold]\n")
 
     
     def log_wifi_recon(self, data):
+        width = min(os.get_terminal_size().columns, 80)
+        print(width)
         for row in data:
             spacing1 = max(len(row["name"]), 4) - 2
             spacing2 = max(len(row["type"]), 4) - 2
             spacing3 = max(max(len(row["auth"]), 4) - 10, 1)
 
             # header
-            console.print(f'\n\n===========================\n> [cyan bold]{row["name"]}[/cyan bold]')
+            console.print(f'\n\n[dark_grey]{"-" * width}[/dark_grey]\n> [cyan]{row["name"]}[/cyan]')
             console.print(f'\nTYPE{" " * spacing2}AUTHENTICATIE{" " * spacing3}ENCRYPTIE')
             console.print(f'[blue]{row["type"]}  {row["auth"]}   {" " * (7 * bool(row["auth"] == "Open"))}{row["encr"]}[/blue]')
             for i, bssid in enumerate(row["bssids"]):
