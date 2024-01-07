@@ -1,4 +1,6 @@
 from tabulate import tabulate
+from scapy.layers import dot11
+from scapy.all import sniff
 import subprocess
 import re
 
@@ -10,7 +12,11 @@ class WifiScanner():
 
         self.logger = kwargs.get('logger')
 
-        self.get_wifis()
+        if args.all:
+            self.get_wifis()
+        
+        if args.beacon:
+            self.sniff_beacons()
 
     
     def get_wifis(self):
@@ -21,6 +27,10 @@ class WifiScanner():
         
 
         return devices
+    
+
+    def sniff_beacons(self):
+        sniff(prn=handle_packet, iface="Wi-Fi", store=False)
     
 
 def normalize_wifis_data(devices):
@@ -66,3 +76,14 @@ def normalize_wifis_data(devices):
         wifis.append(wifi)
 
     return wifis
+
+
+def handle_packet(packet):
+    if packet.haslayer(dot11.Dot11Beacon):
+        # Extract the MAC address of the network
+        bssid = packet[dot11.Dot11].addr2
+        # Get the name of it
+        ssid = packet[dot11.Dot11Elt].info.decode()
+        # Get the RSSI (signal strength)
+        rssi = packet.dBm_AntSignal
+        print(f"Network Detected: SSID: {ssid}, BSSID: {bssid}, RSSI: {rssi}")

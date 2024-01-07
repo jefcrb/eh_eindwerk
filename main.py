@@ -25,7 +25,7 @@ class Main():
             self.wifier = WifiScanner(args = self.args, logger = self.logger)
 
     def setup_args(self):
-        parser = argparse.ArgumentParser(description='CLI voor verschillende zaken omtrent netwerken en wifi', formatter_class=RichHelpFormatter, prog='netwerk_scanner.py', epilog='Gemaakt door Jef Cruysberghs (https://github.com/jefcrb)')
+        parser = argparse.ArgumentParser(description='CLI voor verschillende zaken omtrent netwerken en wifi', formatter_class=RichHelpFormatter, prog='main.py', epilog='Gemaakt door Jef Cruysberghs (https://github.com/jefcrb)')
 
         parser.add_argument('-t', '--timeout', help='Timeout voor verbindingen in seconden', default='5')
         parser.add_argument('-v', '--verbose', help='Verbose output', action='store_true')
@@ -38,6 +38,8 @@ class Main():
         parser_network.set_defaults(command='network')
 
         parser_wifi = sub_parsers.add_parser('wifi', help='Scan wifi netwerken')
+        parser_wifi.add_argument('-a', '--all', help='Scan alle wifi\'s in de omgeving', action='store_true')
+        parser_wifi.add_argument('-b', '--beacon', help='Sniff beacon frames in de omgeving', action='store_true')
         parser_wifi.set_defaults(command='wifi')
         
         self.args = parser.parse_args()
@@ -54,7 +56,6 @@ class RichHelpFormatter(argparse.HelpFormatter):
 
     def format_help(self):
         help_str = super().format_help()
-        help_str += '1'
         return help_str
     
 
