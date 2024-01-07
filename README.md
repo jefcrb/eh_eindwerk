@@ -87,3 +87,13 @@ Voor het scannen van de poorten wordt er gebruik gemaakt van stealth scans en mu
 
         return open_ports
 ```
+
+Voorbeelden:
+```
+python main.py network -a 192.168.1.118 -p 1-1000
+```
+Output:
+
+![image](https://github.com/jefcrb/eh_eindwerk/assets/83902653/3cfc44e4-17bc-42df-a579-b6d734831c38)
+
+(Logging met behulp van de rich library :) )
